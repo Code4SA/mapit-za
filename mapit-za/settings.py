@@ -1,5 +1,5 @@
 """
-Django settings for code4sa project.
+Django settings for mapit-za project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -70,6 +70,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 import dj_database_url
 db_config = dj_database_url.config(default='postgres://mapitza:mapitza@localhost:5432/mapitza')
 db_config['ATOMIC_REQUESTS'] = True
+db_config['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 DATABASES = {
     'default': db_config,
 }
