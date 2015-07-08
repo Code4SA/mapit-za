@@ -26,7 +26,7 @@ else:
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # XXX set me
-GOOGLE_ANALYTICS_ID = set this to something
+# GOOGLE_ANALYTICS_ID = set this to something
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,8 +42,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'pipeline',
     'django_extensions',
+    'mapit',
+    'django.contrib.gis',
 
-    'code4sa',
+    'mapit-za',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,9 +58,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'code4sa.urls'
+ROOT_URLCONF = 'mapit-za.urls'
 
-WSGI_APPLICATION = 'code4sa.wsgi.application'
+WSGI_APPLICATION = 'mapit-za.wsgi.application'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
@@ -66,7 +68,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 import dj_database_url
-db_config = dj_database_url.config(default='sqlite:///db.sqlite3')
+db_config = dj_database_url.config(default='postgres://mapitza:mapitza@localhost:5432/mapitza')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
@@ -95,9 +97,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "code4sa.context_processors.google_analytics",
+    "mapit-za.context_processors.google_analytics",
 )
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -119,8 +120,8 @@ STATICFILES_FINDERS = (
 )
 
 PYSCSS_LOAD_PATHS = [
-    os.path.join(BASE_DIR, 'code4sa', 'static'),
-    os.path.join(BASE_DIR, 'code4sa', 'static', 'bower_components'),
+    os.path.join(BASE_DIR, 'mapit-za', 'static'),
+    os.path.join(BASE_DIR, 'mapit-za', 'static', 'bower_components'),
 ]
 
 PIPELINE_CSS = {
@@ -145,12 +146,17 @@ PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
 PIPELINE_COMPILERS = (
-    'code4sa.pipeline.PyScssCompiler',
+    'mapit-za.pipeline.PyScssCompiler',
 )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'code4sa.pipeline.GzipManifestPipelineStorage'
+STATICFILES_STORAGE = 'mapit-za.pipeline.GzipManifestPipelineStorage'
+
+# Mapit
+MAPIT_AREA_SRID = 4326
+MAPIT_COUNTRY = 'ZA'
+MAPIT_RATE_LIMIT = []
 
 
 # Logging
