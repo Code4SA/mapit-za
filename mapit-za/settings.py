@@ -26,7 +26,7 @@ else:
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # XXX set me
-GOOGLE_ANALYTICS_ID = set this to something
+# GOOGLE_ANALYTICS_ID = set this to something
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'pipeline',
     'django_extensions',
+    'mapit',
+    'django.contrib.gis',
 
     'mapit-za',
 )
@@ -66,7 +68,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 import dj_database_url
-db_config = dj_database_url.config(default='sqlite:///db.sqlite3')
+db_config = dj_database_url.config(default='postgres://mapitza:mapitza@localhost:5432/mapitza')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
@@ -97,7 +99,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "mapit-za.context_processors.google_analytics",
 )
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -151,6 +152,11 @@ PIPELINE_COMPILERS = (
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'mapit-za.pipeline.GzipManifestPipelineStorage'
+
+# Mapit
+MAPIT_AREA_SRID = 4326
+MAPIT_COUNTRY = 'ZA'
+MAPIT_RATE_LIMIT = []
 
 
 # Logging
