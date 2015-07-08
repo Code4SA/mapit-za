@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'pipeline',
     'django_extensions',
 
-    'code4sa',
+    'mapit-za',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,9 +56,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'code4sa.urls'
+ROOT_URLCONF = 'mapit-za.urls'
 
-WSGI_APPLICATION = 'code4sa.wsgi.application'
+WSGI_APPLICATION = 'mapit-za.wsgi.application'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
@@ -95,7 +95,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "code4sa.context_processors.google_analytics",
+    "mapit-za.context_processors.google_analytics",
 )
 
 
@@ -119,8 +119,8 @@ STATICFILES_FINDERS = (
 )
 
 PYSCSS_LOAD_PATHS = [
-    os.path.join(BASE_DIR, 'code4sa', 'static'),
-    os.path.join(BASE_DIR, 'code4sa', 'static', 'bower_components'),
+    os.path.join(BASE_DIR, 'mapit-za', 'static'),
+    os.path.join(BASE_DIR, 'mapit-za', 'static', 'bower_components'),
 ]
 
 PIPELINE_CSS = {
@@ -145,12 +145,12 @@ PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
 PIPELINE_COMPILERS = (
-    'code4sa.pipeline.PyScssCompiler',
+    'mapit-za.pipeline.PyScssCompiler',
 )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'code4sa.pipeline.GzipManifestPipelineStorage'
+STATICFILES_STORAGE = 'mapit-za.pipeline.GzipManifestPipelineStorage'
 
 
 # Logging
