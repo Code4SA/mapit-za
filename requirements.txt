@@ -1,6 +1,5 @@
 dj-database-url==0.3.0
 Django==1.8.2
-django-assets==0.10
 django-cors-headers==1.1.0
 django-extensions==1.5.0
 -e git+https://github.com/Code4SA/mapit.git@multi-area-lookup#egg=django_mapit
@@ -18,6 +17,5 @@ PyYAML==3.11
 Shapely==1.5.9
 six==1.9.0
 South==1.0.2
-webassets==0.10
 Werkzeug==0.10.1
 whitenoise==1.0.6
