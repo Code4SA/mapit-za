@@ -153,6 +153,12 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'app.css',
     },
+    'mapit-css': {
+        'source_filenames': (
+            'mapit/sass/mapit.scss',
+        ),
+        'output_filename': 'mapit/css/mapit.css',
+    },
 }
 PIPELINE_JS = {
     'js': {
