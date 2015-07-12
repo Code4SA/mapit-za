@@ -60,6 +60,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'mapit.middleware.JSONPMiddleware',
+    'mapit.middleware.ViewExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'mapit-za.urls'
