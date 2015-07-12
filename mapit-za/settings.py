@@ -207,7 +207,7 @@ LOGGING = {
         # 'your_package_name': {
         #    'level': 'DEBUG' if DEBUG else 'INFO',
         # },
-        'djangoxx': {
+        'django': {
             'level': 'DEBUG' if DEBUG else 'INFO',
         }
     }
