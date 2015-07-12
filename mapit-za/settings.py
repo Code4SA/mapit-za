@@ -72,7 +72,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://mapitza:mapitza@localhost:5432/mapitza')
+db_config = dj_database_url.config(default='postgres://mapit:mapit@localhost:5432/mapit')
 db_config['ATOMIC_REQUESTS'] = True
 db_config['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 DATABASES = {
@@ -207,7 +207,7 @@ LOGGING = {
         # 'your_package_name': {
         #    'level': 'DEBUG' if DEBUG else 'INFO',
         # },
-        'django': {
+        'djangoxx': {
             'level': 'DEBUG' if DEBUG else 'INFO',
         }
     }
