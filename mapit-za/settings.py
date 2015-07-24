@@ -43,10 +43,11 @@ INSTALLED_APPS = (
     'pipeline',
     'corsheaders',
     'django_extensions',
-    'mapit',
     'django.contrib.gis',
 
     'mapit-za',
+    'mapit',
+
 )
 
 MIDDLEWARE_CLASSES = (
