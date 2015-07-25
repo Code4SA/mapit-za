@@ -25,8 +25,7 @@ if DEBUG:
 else:
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-# XXX set me
-# GOOGLE_ANALYTICS_ID = set this to something
+GOOGLE_ANALYTICS = "UA-48399585-24"
 
 ALLOWED_HOSTS = ['*']
 
@@ -121,7 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "mapit-za.context_processors.google_analytics",
+    "mapit.context_processors.analytics",
 )
 
 # Static files (CSS, JavaScript, Images)
