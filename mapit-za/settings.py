@@ -189,6 +189,9 @@ MAPIT_RATE_LIMIT = []
 # django CORS headers
 CORS_ORIGIN_ALLOW_ALL = True
 
+# GOOGLE API KEY FOR GETTING LAT-LONG CO-ORDS
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+
 # Logging
 LOGGING = {
     'version': 1,

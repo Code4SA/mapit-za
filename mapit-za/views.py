@@ -1,8 +1,10 @@
 import urllib2, urllib
 import json
+import requests
 
 from django.shortcuts import render
 from django.conf import settings
+from django.http import JsonResponse
 
 def encode(s, encoding="utf8"):
     if type(s) == unicode:
@@ -22,23 +24,23 @@ class AddressConverter(object):
         return False
 
     def resolve_address_google(self, address, **kwargs):
-        import ipdb; ipdb.set_trace()
+        # Is this still needed?
         encoded_address = encode(address)
-        address = urllib.quote(encoded_address)
+        url = 'https://maps.googleapis.com/maps/api/geocode/json'
+        params = {
+            'address': encoded_address,
+            'sensor': 'false',
+            'region': 'za',
+            'key': settings.GOOGLE_API_KEY}
 
-        url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&region=za&key=%s" % (address, settings.GOOGLE_API_KEY)
-        response = urllib2.urlopen(url)
-        js = response.read()
-        try:
-            js = json.loads(js)
-        except ValueError as e:
-            # logger.exception("Error trying to resolve %s" % address)
-            raise StandardError("Couldn't resolve %s: %s" % (address, e.message))
+        response = requests.get(url, params=params)
+        js = response.json()
 
         results = []
         if "status" in js and js["status"] not in ("OK", "ZERO_RESULTS"):
             # logger.error("Error trying to resolve %s - %s (%s)" % (address, js.get("error_message", "Generic Error"), js))
-            raise StandardError("Couldn't resolve %s: %s" % (address, js.get("error_message")))
+            # raise StandardError("Couldn't resolve %s: %s" % (address, js.get("error_message")))
+            return {'error': "Couldn't resolve %s: %s" % (address, js.get("error_message"))}
 
         if "results" in js and len(js["results"]) > 0:
             for result in js["results"]:
@@ -57,8 +59,7 @@ class AddressConverter(object):
             if len(results) == 0: return None
             return results
 
-
-    def convert_address(self, address, **kwargs):
+    def resolve_address(self, address, **kwargs):
         address = address.strip()
         if address == "": return None
 
@@ -68,17 +69,19 @@ class AddressConverter(object):
         return self.resolve_address_google(address, **kwargs)
 
 
-def a2w(request):
-    address = request.GET['address']
+def convert_address(request):
+    address = request.GET.get('address')
+    if 'address' is None:
+        # Improve format of this
+        return JsonResponse({'error': 'No address provided.'})
 
     params = dict(request.GET)
     if "address" in params:
         del params["address"]
-    import ipdb; ipdb.set_trace()
+
     converter = AddressConverter()
-    lat_long = converter.convert_address(address, **params)
+    lat_long = converter.resolve_address(address, **params)
 
     if lat_long is None:
         # Return an error: No address or no results
         pass
-
