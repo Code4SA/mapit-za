@@ -4,7 +4,7 @@ import requests
 
 from django.shortcuts import render
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 
 def encode(s, encoding="utf8"):
     if type(s) == unicode:
@@ -38,7 +38,6 @@ class AddressConverter(object):
 
         results = []
         if "status" in js and js["status"] not in ("OK", "ZERO_RESULTS"):
-            # logger.error("Error trying to resolve %s - %s (%s)" % (address, js.get("error_message", "Generic Error"), js))
             # raise StandardError("Couldn't resolve %s: %s" % (address, js.get("error_message")))
             return {'error': "Couldn't resolve %s: %s" % (address, js.get("error_message"))}
 
@@ -71,9 +70,9 @@ class AddressConverter(object):
 
 def convert_address(request):
     address = request.GET.get('address')
-    if 'address' is None:
-        # Improve format of this
-        return JsonResponse({'error': 'No address provided.'})
+    if address is None:
+        return HttpResponseBadRequest()
+        # return JsonResponse({'error': 'No address provided.'})
 
     params = dict(request.GET)
     if "address" in params:
