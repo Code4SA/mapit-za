@@ -6,11 +6,14 @@ from django.shortcuts import render
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 
+from mapit.middleware import ViewException
+from mapit.views.areas import areas_by_point
+
+
 def encode(s, encoding="utf8"):
     if type(s) == unicode:
         return s.encode(encoding)
     return s
-
 
 def home(request):
     return render(request, 'index.html')
@@ -38,8 +41,8 @@ class AddressConverter(object):
 
         results = []
         if "status" in js and js["status"] not in ("OK", "ZERO_RESULTS"):
-            # raise StandardError("Couldn't resolve %s: %s" % (address, js.get("error_message")))
-            return {'error': "Couldn't resolve %s: %s" % (address, js.get("error_message"))}
+            message = "Couldn\'t resolve %s: %s" % (address)
+            raise ViewException(format, message, 404)
 
         if "results" in js and len(js["results"]) > 0:
             for result in js["results"]:
@@ -55,6 +58,7 @@ class AddressConverter(object):
                     "source" : "Google Geocoding API",
                 })
 
+            # What should this error be?
             if len(results) == 0: return None
             return results
 
@@ -71,16 +75,26 @@ class AddressConverter(object):
 def convert_address(request):
     address = request.GET.get('address')
     if address is None:
-        return HttpResponseBadRequest()
-        # return JsonResponse({'error': 'No address provided.'})
+        message = 'No address was provided.'
+        raise ViewException(format, message, 400)
 
     params = dict(request.GET)
     if "address" in params:
         del params["address"]
 
     converter = AddressConverter()
-    lat_long = converter.resolve_address(address, **params)
+    lat_long_results = converter.resolve_address(address, **params)
 
-    if lat_long is None:
-        # Return an error: No address or no results
+    if lat_long_results is None:
+        message = 'No address was provided.'
+        raise ViewException(format, message, 400)
+
+    # When would multiple results be returned?
+    for result in lat_long_results:
+        areas = areas_by_point(request, 4326, result['lng'], result['lat'])
+
+    for item in areas.streaming_content:
         pass
+    return areas
+
+
