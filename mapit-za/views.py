@@ -24,10 +24,6 @@ def convert_address(request, format='json'):
     converter = AddressConverter()
     locations = converter.resolve_address(address, partial=bool(request.GET.get('partial')))
 
-    if not locations:
-        # TODO: something better than this
-        raise ViewException(format, 'No areas could be found.', 404)
-
     # this is a copy from mapit.views.areas.areas_by_point
     # because it's hard to reuse their code :(
 
