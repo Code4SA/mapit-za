@@ -1,12 +1,15 @@
+from itertools import chain
+
 from django.shortcuts import render
 from django.contrib.gis.geos import Point
 from django.conf import settings
 from django.utils.translation import ugettext as _
 
 from mapit.middleware import ViewException
-from mapit.views.areas import areas_by_point, PYGDAL, query_args, output_areas
+from mapit.views.areas import add_codes, PYGDAL, query_args, output_html, output_json
 from mapit.ratelimitcache import ratelimit
 from mapit.models import Area, Geometry
+from mapit.iterables import iterdict
 
 from .address import AddressConverter
 
@@ -60,4 +63,12 @@ def convert_address(request, format='json'):
             args['polygons__in'] = geoms
             areas.extend(Area.objects.filter(**args).all())
 
-    return output_areas(request, _("Areas matching the address '{0}'").format(address), format, areas, indent_areas=True)
+    areas = add_codes(areas)
+    if format == 'html':
+        return output_html(request, _("Areas matching the address '{0}'").format(address), areas, indent_areas=True)
+
+    # hack to include the geocoded addresses in the results
+    data = iterdict(chain(
+        ((area.id, area.as_dict()) for area in areas),
+        [("addresses", locations)]))
+    return output_json(data)
