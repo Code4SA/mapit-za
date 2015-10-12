@@ -37,8 +37,8 @@ def convert_address(request, format='json'):
     # we find areas for every lat/long coord we got back
     areas = []
     type = request.GET.get('type', '')
-    for location in locations:
-        location = Point(float(location['lng']), float(location['lat']), srid=4326)
+    for coords in locations:
+        location = Point(float(coords['lng']), float(coords['lat']), srid=4326)
         try:
             location.transform(settings.MAPIT_AREA_SRID, clone=True)
         except:
@@ -51,17 +51,22 @@ def convert_address(request, format='json'):
             # do the contains test on all the geometries matching the bounding-box
             # index, even if it could be much quicker to filter some out first
             # (ie. the EUR ones).
+            coords['areas'] = []
             args['polygon__bbcontains'] = location
             shapes = Geometry.objects.filter(**args).defer('polygon')
             for shape in shapes:
                 try:
-                    areas.append(Area.objects.get(polygons__id=shape.id, polygons__polygon__contains=location))
+                    area = Area.objects.get(polygons__id=shape.id, polygons__polygon__contains=location)
+                    coords['areas'].append(str(area.id))
+                    areas.append(area)
                 except:
                     pass
         else:
             geoms = list(Geometry.objects.filter(polygon__contains=location).defer('polygon'))
             args['polygons__in'] = geoms
-            areas.extend(Area.objects.filter(**args).all())
+            matches = Area.objects.filter(**args).all()
+            coords['areas'] = [str(m.id) for m in matches]
+            areas.extend(matches)
 
     areas = add_codes(areas)
     if format == 'html':
