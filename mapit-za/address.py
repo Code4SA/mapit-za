@@ -2,12 +2,16 @@ import logging
 
 import requests
 from django.conf import settings
+from django.core.cache import get_cache
 
 
 log = logging.getLogger(__name__)
 
 
 class AddressConverter(object):
+    def __init__(self):
+        self.cache = get_cache('addresses')
+
     def reject_partial_match(self, result):
         if "partial_match" in result and result["partial_match"]:
             return True
@@ -17,20 +21,28 @@ class AddressConverter(object):
         if type(address) == unicode:
             address = address.encode('utf8')
 
-        url = 'https://maps.googleapis.com/maps/api/geocode/json'
-        params = {
-            'address': address,
-            'sensor': 'false',
-            'region': 'za',
-            'key': settings.GOOGLE_API_KEY}
+        js = self.cache.get(address)
+        cached = True
+        if js is None:
+            cached = False
+            url = 'https://maps.googleapis.com/maps/api/geocode/json'
+            params = {
+                'address': address,
+                'sensor': 'false',
+                'region': 'za',
+                'key': settings.GOOGLE_API_KEY}
 
-        response = requests.get(url, params=params)
-        js = response.json()
+            response = requests.get(url, params=params)
+            js = response.json()
 
         if js.get('status') == 'ZERO_RESULTS':
+            if not cached:
+                self.cache.set(address, js)
             return []
 
         if js.get('status') == 'OK':
+            if not cached:
+                self.cache.set(address, js)
             results = []
 
             for result in js["results"]:

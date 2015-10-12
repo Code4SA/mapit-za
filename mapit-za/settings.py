@@ -94,6 +94,9 @@ if DEBUG:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        },
+        'addresses': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         }
     }
     CACHE_MIDDLEWARE_SECONDS = 0
@@ -102,6 +105,10 @@ else:
         'default': {
             'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
             'LOCATION': '/var/tmp/django_cache',
+        },
+        'addresses': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': '/var/tmp/django_address_cache',
         }
     }
     # how long should we cache all pages in the site for?
