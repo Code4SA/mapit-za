@@ -33,8 +33,12 @@ Every now and then you need to import new boundaries into Mapit. Generally this 
         python manage.py mapit_import --generation_id=XXX --country_code=ZA --name_type_code=common --code_type=MDB --area_type_code=WD --name_field=WardID --cade_field=WardID -v 2 --preserve shapefile.shp``
 
 5. That WON'T make any changes since you haven't specified ``--commit`` but it lets you sanity check what's going on. Run it again with ``--commit``.
+6. Ensure that mapit-za/management/za_metadata.py is up to date with the latest mappings between different levels.
+7. Update the MDB-level codes:
 
-5. Only activate the new generation once all the data has been imported:
+        python manage.py mapit_za_codes --generation=2
+
+8. Only activate the new generation once all the data has been imported:
 
         python manage.py mapit_generation_activate
 
