@@ -30,7 +30,7 @@ Every now and then you need to import new boundaries into Mapit. Generally this 
 3. Take note of the ID of the generation you just created, you'll need it later.
 4. Import the shapes for each area type (ward, province, etc) separately, specifying the new generation ID. For each shapefile you need to tell Mapit which fields from the shapefile to use for the **name** and **code** fields in the database.
 
-        python python manage.py mapit_import --generation_id=XXX --country_code=ZA --name_type_code=common --code_type=MDB --area_type_code=WD --name_field=WardID --cade_field=WardID -v 2 --preserve shapefile.shp``
+        python manage.py mapit_import --generation_id=XXX --country_code=ZA --name_type_code=common --code_type=MDB --area_type_code=WD --name_field=WardID --cade_field=WardID -v 2 --preserve shapefile.shp``
 
 5. That WON'T make any changes since you haven't specified ``--commit`` but it lets you sanity check what's going on. Run it again with ``--commit``.
 
