@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:5000"
+    command: python manage.py runserver 0.0.0.0:5000 
+    environment:
+      - DATABASE_URL=postgresql://mapit:devpassword@db/mapit
+      - DJANGO_DEBUG=true
+      - DJANGO_SECRET_KEY=not-secret-in-dev
+
+  db:
+    image: postgis/postgis:11-3.3
+    environment:
+      - POSTGRES_USER=mapit
+      - POSTGRES_PASSWORD=devpassword
+      - POSTGRES_DB=mapit
+      - PGUSER=mapit
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "log_statement=all"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
