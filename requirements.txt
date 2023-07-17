@@ -2,7 +2,6 @@ dj-database-url==0.3.0
 Django==1.8.2
 django-cors-headers==1.1.0
 django-extensions==1.5.0
--e git+https://github.com/Code4SA/mapit.git@za#egg=django_mapit
 django-pipeline==1.5.1
 enum34==1.0.4
 futures==3.0.2
@@ -18,3 +17,5 @@ six==1.9.0
 South==1.0.2
 Werkzeug==0.10.1
 whitenoise==1.0.6
+-e git+https://github.com/Code4SA/mapit.git@za#egg=django_mapit
+
